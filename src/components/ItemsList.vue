@@ -8,7 +8,7 @@
       :currentListId="card._id"
     >
       <div>{{ card.name }}</div>
-      <div>{{ card.edited }}</div>
+      <div>{{ Math.floor((Date.now() - card.edited) / 60000) }} minutes ago</div>
     </span>
   </draggable>
 </template>

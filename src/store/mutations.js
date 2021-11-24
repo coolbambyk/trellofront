@@ -3,7 +3,6 @@ import axios from "axios";
 export default {
     createNewList(state, payload) {
       state.lastListId = state.lastListId+1;
-      console.log(state)
       const list = {
         id: state.lastListId,
         name: payload,
@@ -15,24 +14,23 @@ export default {
           params: list
         })
     },
-    deleteList(state, payload) {
-      state.lists.map((list) => {
-        console.log(list.id, payload)
+    async deleteList(state, payload) {
+      await state.lists.map((list, index) => {
         if(list.id === payload) {
           axios.delete(`http://localhost:5000/api/lists/${list._id}`)
+          state.lists.splice(index, 1);
         }
       })
       
-      
-      state.lists.splice(payload, 1);
     },
     createNewCard(state, payload) {
       state.lastCardId = state.cards.length
+
       console.log(payload)
       const card = {
         listId: payload.listId,
         id: state.lastCardId,
-        edited: 123,
+        edited: Date.now(),
         name: payload.name,
         _id: Math.floor(Math.random() * 61900000000000000000)
       };
@@ -56,7 +54,8 @@ export default {
           axios.put('http://localhost:5000/api/cards', null, {
             params: {
               _id: card._id,
-              name: payload.name
+              name: payload.name,
+              edited: Date.now()
             }
           })
           return Object.assign({}, card, payload);
@@ -80,7 +79,10 @@ export default {
     async fetchLists(state) {
       await axios
         .get('http://localhost:5000/api/lists')
-        .then(response => state.lists = response.data)
+        .then(response => state.lists = response.data);
+      state.lists.length === 0 
+        ? null
+        : state.lastListId = Math.max.apply(Math, state.lists.map((o) => o.id ))
     },
     changeCard(state, payload) {
       state.cards = state.cards.map((card) => {

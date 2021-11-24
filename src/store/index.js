@@ -8,7 +8,7 @@ const store = createStore({
   state() {
     return {
       overlay: false,
-      lastListId: 3,
+      lastListId: -1,
       lastCardId: 5,
       currentData: null,
       lists: [

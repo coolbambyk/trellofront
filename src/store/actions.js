@@ -3,7 +3,7 @@ export default {
       context.commit("createNewList", payload);
     },
     deleteList(context, payload) {
-        context.commit("deleteList", payload)
+        context.commit("deleteList", payload);
     },
     createCard(context, payload) {
       context.commit("createNewCard", payload);
