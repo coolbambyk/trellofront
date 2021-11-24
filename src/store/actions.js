@@ -17,6 +17,7 @@ export default {
     },
     saveCard(context, payload) {
       context.commit("saveCard", payload);
+      context.commit("fetchCards");
     },
     deleteCard(context, payload) {
       context.commit("deleteCard", payload);
