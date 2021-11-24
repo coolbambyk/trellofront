@@ -14,8 +14,8 @@ export default {
           params: list
         })
     },
-    async deleteList(state, payload) {
-      await state.lists.map((list, index) => {
+    deleteList(state, payload) {
+      state.lists.map((list, index) => {
         if(list.id === payload) {
           axios.delete(`http://localhost:5000/api/lists/${list._id}`)
           state.lists.splice(index, 1);
@@ -26,19 +26,19 @@ export default {
     createNewCard(state, payload) {
       state.lastCardId = state.cards.length
 
-      console.log(payload)
       const card = {
         listId: payload.listId,
         id: state.lastCardId,
         edited: Date.now(),
         name: payload.name,
-        _id: Math.floor(Math.random() * 61900000000000000000)
+        _id: payload._id
       };
-      state.cards.push(card);
+      
       axios
         .post('http://localhost:5000/api/cards', null, {
           params: card
         })
+      state.cards.push(card);
 
     },
     toggleOverlay(state) {
@@ -48,14 +48,13 @@ export default {
       state.currentData = payload;
     },
     saveCard(state, payload) {
-      console.log(payload)
       state.cards = state.cards.map((card) => {
         if (card.id === payload.id) {
           axios.put('http://localhost:5000/api/cards', null, {
             params: {
               _id: card._id,
               name: payload.name,
-              edited: Date.now()
+              edited: Date.now(),
             }
           })
           return Object.assign({}, card, payload);
@@ -86,7 +85,7 @@ export default {
     },
     changeCard(state, payload) {
       state.cards = state.cards.map((card) => {
-        if (card._id === payload.startListId) {
+        if (+card._id === +payload.startListId) {
           axios.put('http://localhost:5000/api/cards', null, {
             params: {
               _id: card._id,

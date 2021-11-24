@@ -18,6 +18,7 @@ export default {
           listId: this.listId,
           name: this.cardName,
           edited: Date.now(),
+          _id: Math.floor(Math.random() * 61900000000000000000)
         };
         this.$store.dispatch("createCard", card);
         this.cardName = "";
