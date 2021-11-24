@@ -51,7 +51,7 @@ return {
     cards() {
       const cardFilteredByListId = this.$store.getters["cards"];
       return cardFilteredByListId.filter((card) => {
-        if (+card.listId === +this.listId) {
+        if (card.listId === this.listId) {
           return true;
         } else {
           return false;
