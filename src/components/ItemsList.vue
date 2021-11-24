@@ -52,7 +52,6 @@ return {
     cards() {
       const cardFilteredByListId = this.$store.getters["cards"];
       return cardFilteredByListId.filter((card) => {
-        console.log(cardFilteredByListId)
         if (card.listId === this.listId) {
           return true;
         } else {
