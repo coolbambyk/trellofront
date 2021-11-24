@@ -20,4 +20,13 @@ export default {
     deleteCard(context, payload) {
       context.commit("deleteCard", payload);
     },
+    fetchCards(context) {
+      context.commit("fetchCards");
+    },
+    fetchLists(context) {
+      context.commit("fetchLists");
+    },
+    changeCard(context, payload) {
+      context.commit("changeCard", payload);
+    },
   };

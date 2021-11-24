@@ -32,6 +32,8 @@ export default {
         listId: this.currentData.listId,
         id: this.currentData.id,
         name: this.cardName,
+        _id: Math.floor(Math.random() * 61900000000000000000),
+        edited: 123
       };
       this.$store.dispatch("saveCard", card);
       this.cardName = null;
@@ -104,11 +106,6 @@ button {
   cursor: pointer;
   transition-duration: 0.4s;
 }
-
-button:hover {
-  color: white;
-}
-
 
 .container-button {
   display: flex;

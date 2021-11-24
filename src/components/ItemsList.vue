@@ -1,26 +1,41 @@
 <template>
-  <draggable :options="{ group: 'cards' }" group="cards" ghostClass="ghost">
+  <draggable :options="{ group: 'cards' }" :listId="listId" group="cards" ghostClass="ghost" @end="log($event)">
     <span
       class="element-card"
       v-for="(card, index) in cards"
       :key="index"
       @click="togglePopup(card)"
+      :currentListId="card._id"
     >
-      <strong>{{ card.name }}</strong> <strong>{{ card.edited}}</strong>
+      <div>{{ card.name }}</div>
+      <div>{{ card.edited }}</div>
     </span>
   </draggable>
 </template>
 
 <script>
 import { VueDraggableNext } from "vue-draggable-next";
-import axios from 'axios';
 
 export default {
+  data() {
+return {
+  };
+},
   props: ["listId", "listName"],
   components: {
     draggable: VueDraggableNext,
   },
   methods: {
+    log(event) {
+      if(event.pullMode === true) {
+        const data = {
+          endListId: event.to.getAttribute("listId"),
+          startListId: event.item.getAttribute("currentListId")
+        }
+        this.$store.dispatch("changeCard", data);
+      } 
+        
+      },
     togglePopup(data) {
       const currentData = {
         listId: this.listId,
@@ -48,20 +63,19 @@ export default {
     },
   },
   mounted() {
-    axios
-      .get('http://localhost:5000/api/cards')
-      .then(response => (console.log(response)))
+    this.$store.dispatch("fetchCards")
   }
-};
+  };
 </script>
 
 <style>
 .element-card {
-  
+  justify-content: center;
   position: relative;
   background-color: white;
   height: auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 10px;
   min-height: 25px;

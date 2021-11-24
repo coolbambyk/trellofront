@@ -11,7 +11,7 @@
       >
         <div class="list-card" v-for="(list, index) in lists" :key="index">
           <label class="list-header">{{ list.name }}</label>
-          <button @click="deleteList(index)">Delete</button>
+          <button @click="deleteList(list.id)">Delete</button>
           <div class="list-content">
             <ItemsList :listId="list.id" :listName="list.name" />
           </div>
@@ -19,14 +19,15 @@
             <ItemCard :listId="list.id" />
           </div>
         </div>
-      </draggable>
-      <input
+        <input
         type="text"
         class="input-new-list"
         placeholder="Create a List"
         v-model="listName"
         @keyup.enter="createList"
       />
+      </draggable>
+      
     </section>
   </main>
 </template>
@@ -61,6 +62,9 @@ export default {
     deleteList(index) {
       this.$store.dispatch("deleteList", index);
     }
+  },
+  mounted() {
+    this.$store.dispatch("fetchLists")
   },
   computed: {
     lists() {
@@ -124,9 +128,6 @@ export default {
   min-width: 260px;
 }
 
-.input-new-list::placeholder {
-  color: white;
-}
 
 .list-card {
   position: relative;

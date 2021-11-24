@@ -17,7 +17,7 @@ export default {
         const card = {
           listId: this.listId,
           name: this.cardName,
-          edited: Date.now()
+          edited: Date.now(),
         };
         this.$store.dispatch("createCard", card);
         this.cardName = "";
