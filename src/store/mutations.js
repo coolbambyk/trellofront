@@ -38,7 +38,6 @@ export default {
         .post('https://trellobackendnodejs.herokuapp.com/api/cards', null, {
           params: card
         })
-      state.cards.push(card);
 
     },
     toggleOverlay(state) {

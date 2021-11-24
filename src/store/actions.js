@@ -7,6 +7,7 @@ export default {
     },
     createCard(context, payload) {
       context.commit("createNewCard", payload);
+      context.commit("fetchCards");
     },
     toggleOverlay(context) {
       context.commit("toggleOverlay");
