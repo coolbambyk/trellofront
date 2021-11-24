@@ -1,5 +1,5 @@
 <template>
-  <draggable :options="{ group: 'cards' }" :listId="listId" group="cards" ghostClass="ghost" @end="log($event)">
+  <draggable :options="{ group: 'cards' }" :listId="listId" group="cards" ghostClass="ghost" @end="endCard($event)">
     <span
       class="element-card"
       v-for="(card, index) in cards"
@@ -26,13 +26,14 @@ return {
     draggable: VueDraggableNext,
   },
   methods: {
-    log(event) {
+    endCard(event) {
       if(event.pullMode === true) {
         const data = {
           endListId: event.to.getAttribute("listId"),
           startListId: event.item.getAttribute("currentListId")
         }
         this.$store.dispatch("changeCard", data);
+        this.$store.dispatch("fetchCards")
       } 
         
       },
@@ -51,6 +52,7 @@ return {
     cards() {
       const cardFilteredByListId = this.$store.getters["cards"];
       return cardFilteredByListId.filter((card) => {
+        console.log(cardFilteredByListId)
         if (card.listId === this.listId) {
           return true;
         } else {

@@ -28,6 +28,5 @@ export default {
     },
     changeCard(context, payload) {
       context.commit("changeCard", payload);
-      context.commit("fetchCards");
     },
   };

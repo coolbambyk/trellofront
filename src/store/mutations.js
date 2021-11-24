@@ -94,6 +94,7 @@ export default {
               listId: payload.endListId
             }
           })
+          this.fetchCards()
         }
       });
     }
