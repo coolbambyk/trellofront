@@ -9,9 +9,7 @@ export default {
         name: payload
       };
       await axios
-        .post('https://trellobackendnodejs.herokuapp.com/api/lists', null, {
-          params: list
-        })
+        .post('https://trellobackendnodejs.herokuapp.com/api/lists', list)
       context.commit("createNewList", list);
     },
     deleteList(context, payload) {
@@ -35,9 +33,7 @@ export default {
       };
       
       await axios
-        .post('localhost:5000/api/cards', {
-           card
-        })
+        .post('https://trellobackendnodejs.herokuapp.com/api/cards', card)
       context.commit("createNewCard", card);
     },
     toggleOverlay(context) {
@@ -47,10 +43,26 @@ export default {
       context.commit("openForm", payload);
     },
     saveCard(context, payload) {
-      context.commit("saveCard", payload);
+      context.state.cards = context.state.cards.map(async (card) => {
+        if (card.id === payload.id) {
+          await axios.put('https://trellobackendnodejs.herokuapp.com/api/cards',
+            {
+              _id: card._id,
+              name: payload.name,
+              edited: Date.now(),
+            })
+          return Object.assign({}, card, payload);
+        }
+        return card;
+      });
     },
     deleteCard(context, payload) {
-      context.commit("deleteCard", payload);
+      context.state.cards.filter((card) => payload.id === card.id).map(async(card) => await axios
+        .delete(`https://trellobackendnodejs.herokuapp.com/api/cards/${card._id}`))
+      const indexToDelete = context.state.cards
+        .map((card) => card.id)
+        .indexOf(payload.id);
+      context.commit("deleteCard", indexToDelete);
     },
     async fetchCards(context) {
       await axios
@@ -66,6 +78,14 @@ export default {
       context.commit("fetchLists");
     },
     changeCard(context, payload) {
-      context.commit("changeCard", payload);
+      context.state.cards = context.state.cards.map(async(card) => {
+        if (card._id === payload.startListId) {
+          await axios.put('https://trellobackendnodejs.herokuapp.com/api/cards', {
+              _id: payload.startListId,
+              listId: payload.endListId
+            })
+          this.fetchCards()
+        }
+      });
     },
   };
